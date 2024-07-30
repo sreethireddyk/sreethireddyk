@@ -1,0 +1,66 @@
+import json
+import os
+
+FILE_PATH = 'todo_list.json'
+
+def load_tasks():
+    if os.path.exists(FILE_PATH):
+        with open(FILE_PATH, 'r') as file:
+            return json.load(file)
+    return []
+
+def save_tasks(tasks):
+    with open(FILE_PATH, 'w') as file:
+        json.dump(tasks, file)
+
+def list_tasks(tasks):
+    if not tasks:
+        print("No tasks found.")
+        return
+    for idx, task in enumerate(tasks, start=1):
+        print(f"{idx}. {task}")
+
+def add_task(tasks):
+    task = input("Enter the task: ")
+    tasks.append(task)
+    print(f"Task '{task}' added.")
+
+def remove_task(tasks):
+    list_tasks(tasks)
+    try:
+        index = int(input("Enter the number of the task to remove: ")) - 1
+        if 0 <= index < len(tasks):
+            removed_task = tasks.pop(index)
+            print(f"Task '{removed_task}' removed.")
+        else:
+            print("Invalid number.")
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+
+def main():
+    tasks = load_tasks()
+
+    while True:
+        print("\nTo-Do List Application")
+        print("1. List tasks")
+        print("2. Add task")
+        print("3. Remove task")
+        print("4. Quit")
+        
+        choice = input("Enter your choice: ")
+        
+        if choice == '1':
+            list_tasks(tasks)
+        elif choice == '2':
+            add_task(tasks)
+            save_tasks(tasks)
+        elif choice == '3':
+            remove_task(tasks)
+            save_tasks(tasks)
+        elif choice == '4':
+            break
+        else:
+            print("Invalid choice. Please select again.")
+
+if __name__ == "__main__":
+    main()
